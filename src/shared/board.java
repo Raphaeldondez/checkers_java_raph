@@ -1,15 +1,15 @@
 package shared;
 
 public class board {
-	private final int side_size = 10;
-	private final int board_size = side_size * side_size;
-	private final int EMPTY = 0;
-	private final int RED_PAWN = 1;
-	private final int RED_KING = 2;
-	private final int BLACK_PAWN = 3;
-	private final int BLACK_KING = 4;
+	public final int side_size = 10;
+	public final int board_size = side_size * side_size;
+	public final int EMPTY = 0;
+	public final int RED_PAWN = 1;
+	public final int RED_KING = 2;
+	public final int BLACK_PAWN = 3;
+	public final int BLACK_KING = 4;
 
-	private int[] board = new int[board_size];
+	public int[] board = new int[board_size];
 
 	public board() {
 		int start_line = 0;
