@@ -10,15 +10,24 @@ import javax.sound.sampled.SourceDataLine;
 
 public class sound_effect {
 	File audio_file;
+	SourceDataLine source;
+	AudioInputStream in;
 
 	public sound_effect(String filename) {
 		audio_file = new File(filename);
 		try {
-			AudioInputStream in = AudioSystem.getAudioInputStream(audio_file);
+			in = AudioSystem.getAudioInputStream(audio_file);
 			AudioFormat format = in.getFormat();
 			DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-			SourceDataLine source = (SourceDataLine) AudioSystem.getLine(info);
+			source = (SourceDataLine) AudioSystem.getLine(info);
 			source.open(format);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public void play() {
+		try {
 			source.start();
 			int bytes_read = 0;
 			byte[] audio_data = new byte[2000];
@@ -29,8 +38,7 @@ public class sound_effect {
 			}
 			source.drain();
 			source.close();
-		} catch (Exception ex) {
-			ex.printStackTrace();
+		} catch (Exception e) {
 		}
 	}
 
