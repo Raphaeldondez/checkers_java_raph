@@ -22,6 +22,7 @@ class client extends JFrame {
 		add(board_pannel, BorderLayout.CENTER);
 		pack();
 		setVisible(true);
+		sound_effect s = new sound_effect("sound.wav");
 	}
 
 	class board_pannel extends JPanel implements MouseListener {
