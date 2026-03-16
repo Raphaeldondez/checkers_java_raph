@@ -1,4 +1,4 @@
-package client;
+package Client;
 
 import java.io.File;
 
@@ -8,13 +8,13 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
-public class sound_effect {
+public class SoundEffect {
 	File audio_file;
 	SourceDataLine source;
 	AudioInputStream in;
 
-	public sound_effect(String filename) {
-		audio_file = new File(filename);
+	public SoundEffect(String fileName) {
+		audio_file = new File(fileName);
 		try {
 			in = AudioSystem.getAudioInputStream(audio_file);
 			AudioFormat format = in.getFormat();

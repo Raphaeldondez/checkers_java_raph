@@ -1,10 +1,10 @@
-package server;
+package Server;
 
-import shared.board;
+import shared.Board;
 import java.net.*;
 import java.io.*;
 
-class server {
+class Server {
 	private ServerSocket sock;
 
 	public static void main(String[] args) {

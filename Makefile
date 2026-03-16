@@ -7,6 +7,6 @@ all:
 	$(JC) $(FLAGS) $(SOURCES)
 
 run: all
-	java -cp build client.client
+	java -cp build Client.Client
 clean:
 	rm -r build/*

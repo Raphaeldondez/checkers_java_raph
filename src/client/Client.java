@@ -1,6 +1,6 @@
-package client;
+package Client;
 
-import shared.board;
+import shared.Board;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,43 +10,43 @@ import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.Enumeration;
 
-class client extends JFrame implements ActionListener {
-	private int square_clicked = -1;
+class Client extends JFrame implements ActionListener {
+	private int squareClicked = -1;
 	private final int delta = 60;
-	int origin_x;
-	int origin_y;
-	JMenuItem menuitem_manage_connections;
-	JMenuItem menuitem_new_game;
-	board_panel board_panel;
+	int originX;
+	int originY;
+	JMenuItem menuItemManageConnections;
+	JMenuItem menuItemNewGame;
+	BoardPanel boardPanel;
 
-	public client() {
+	public Client() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JMenuBar menubar = new JMenuBar();
+		JMenuBar menuBar = new JMenuBar();
 
-		JMenu menu_game = new JMenu("Game");
-		JMenu menu_connect = new JMenu("Connections");
-		menubar.add(menu_game);
-		menubar.add(menu_connect);
+		JMenu menuGame = new JMenu("Game");
+		JMenu menuConnect = new JMenu("Connections");
+		menuBar.add(menuGame);
+		menuBar.add(menuConnect);
 
-		menuitem_new_game = new JMenuItem("New Game", KeyEvent.VK_N);
-		menuitem_manage_connections = new JMenuItem("Manage_connections");
+		menuItemNewGame = new JMenuItem("New Game", KeyEvent.VK_N);
+		menuItemManageConnections = new JMenuItem("Manage_connections");
 
-		menuitem_new_game.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-		menuitem_new_game.addActionListener(this);
-		menuitem_manage_connections.addActionListener(this);
+		menuItemNewGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
+		menuItemNewGame.addActionListener(this);
+		menuItemManageConnections.addActionListener(this);
 
-		menu_game.add(menuitem_new_game);
-		menu_connect.add(menuitem_manage_connections);
+		menuGame.add(menuItemNewGame);
+		menuConnect.add(menuItemManageConnections);
 
-		setJMenuBar(menubar);
+		setJMenuBar(menuBar);
 		setVisible(true);
 	}
 
-	class net_config extends JDialog implements ActionListener {
+	class NetConfig extends JDialog implements ActionListener {
 		private JButton select;
 		private JButton cancel;
 
-		public net_config() {
+		public NetConfig() {
 			setSize(500, 300);
 			setLocationRelativeTo(null);
 			select = new JButton("Select");
@@ -106,19 +106,19 @@ class client extends JFrame implements ActionListener {
 		}
 	}
 
-	class board_panel extends JPanel implements MouseListener {
-		private final int board_panel_size_pixels = 600;
-		private board b;
+	class BoardPanel extends JPanel implements MouseListener {
+		private final int boardPanelSizePixels = 600;
+		private Board b;
 
-		public board_panel() {
+		public BoardPanel() {
 			addMouseListener(this);
-			sound_effect s = new sound_effect("effects/board_setup.wav");
+			SoundEffect s = new SoundEffect("effects/board_setup.wav");
 			s.play();
-			b = new board();
+			b = new Board();
 		}
 
 		public Dimension getPreferredSize() {
-			return new Dimension(board_panel_size_pixels, board_panel_size_pixels);
+			return new Dimension(boardPanelSizePixels, boardPanelSizePixels);
 		}
 
 		public void paintComponent(Graphics g) {
@@ -126,44 +126,49 @@ class client extends JFrame implements ActionListener {
 			g.setColor(Color.gray);
 			// center board
 			Dimension d = this.getSize();
-			origin_x = (d.width - (b.side_size * delta)) / 2;
-			origin_y = (d.height - (b.side_size * delta)) / 2;
+			originX = (d.width - (b.sideSize * delta)) / 2;
+			originY = (d.height - (b.sideSize * delta)) / 2;
 
-			// System.out.printf("origin x: %d\norigin y: %d\n", origin_x, origin_y);
+			// System.out.printf("origin x: %d\norigin y: %d\n", originX, originY);
 
 			// draw grid
-			for (int line = 0; line <= b.side_size; line++) {
-				g.drawLine(origin_x, origin_y + line * delta, origin_x + b.side_size * delta,
-						origin_y + line * delta);
-				g.drawLine(origin_x + line * delta, origin_y, origin_x + line * delta,
-						origin_y + b.side_size * delta);
+			for (int line = 0; line <= b.sideSize; line++) {
+				g.drawLine(originX, originY + line * delta, originX + b.sideSize * delta,
+						originY + line * delta);
+				g.drawLine(originX + line * delta, originY, originX + line * delta,
+						originY + b.sideSize * delta);
 			}
-			final int circle_diameter = 2 * delta / 3;
+			final int circleDiameter = 2 * delta / 3;
 
-			// draw pieces
-			for (int y_index = 0; y_index < b.side_size; y_index++) {
-				for (int x_index = 0; x_index < b.side_size; x_index++) {
-					int board_array_idx = x_index + y_index * b.side_size;
-					if (board_array_idx == square_clicked) {
+			// draw pieces and board squares
+			for (int yIndex = 0; yIndex < b.sideSize; yIndex++) {
+				for (int xIndex = 0; xIndex < b.sideSize; xIndex++) {
+					int boardArrayIdx = xIndex + yIndex * b.sideSize;
+					g.setColor(Color.green);
+					g.fillRect(originX + 1 + delta * xIndex,
+							originY + 1 + delta * yIndex,
+							delta - 1, delta - 1);
+
+					if (boardArrayIdx == squareClicked) {
 						g.setColor(Color.green);
-						g.fillRect(origin_x + 1 + delta * x_index,
-								origin_y + 1 + delta * y_index,
+						g.fillRect(originX + 1 + delta * xIndex,
+								originY + 1 + delta * yIndex,
 								delta - 1, delta - 1);
 					}
-					if (b.board[board_array_idx] == b.BLACK_PAWN
-							|| b.board[x_index] == b.BLACK_KING)
+					if (b.board[boardArrayIdx] == b.BLACK_PAWN
+							|| b.board[xIndex] == b.BLACK_KING)
 						g.setColor(Color.BLACK);
-					else if (b.board[board_array_idx] == b.RED_PAWN
-							|| b.board[x_index] == b.RED_KING)
+					else if (b.board[boardArrayIdx] == b.RED_PAWN
+							|| b.board[xIndex] == b.RED_KING)
 						g.setColor(Color.RED);
 					else
 						continue;
-					g.fillOval((origin_x - circle_diameter / 2 + delta / 2)
-							+ delta * x_index,
-							(origin_y - circle_diameter / 2 + delta / 2)
-									+ delta * y_index,
-							circle_diameter,
-							circle_diameter);
+					g.fillOval((originX - circleDiameter / 2 + delta / 2)
+							+ delta * xIndex,
+							(originY - circleDiameter / 2 + delta / 2)
+									+ delta * yIndex,
+							circleDiameter,
+							circleDiameter);
 				}
 			}
 		}
@@ -178,12 +183,12 @@ class client extends JFrame implements ActionListener {
 		public void mousePressed(MouseEvent e) {
 			Point p = e.getPoint();
 			// System.out.printf("x: %d\ny: %d\n", p.x, p.y);
-			if (p.y < b.side_size * delta + origin_y && p.y > origin_y
-					&& p.x < b.side_size * delta + origin_x
-					&& p.x > origin_x) { // make sure click is within bounds
-				square_clicked = ((p.y - origin_y) / delta) * b.side_size
-						+ (p.x - origin_x) / delta;
-				// System.out.printf("clicked on %d\n", square_clicked);
+			if (p.y < b.sideSize * delta + originY && p.y > originY
+					&& p.x < b.sideSize * delta + originX
+					&& p.x > originX) { // make sure click is within bounds
+				squareClicked = ((p.y - originY) / delta) * b.sideSize
+						+ (p.x - originX) / delta;
+				// System.out.printf("clicked on %d\n", squareClicked);
 				repaint();
 			}
 		}
@@ -229,18 +234,18 @@ class client extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
-		if (o == menuitem_new_game) {
-			board_panel = new board_panel();
-			add(board_panel,
+		if (o == menuItemNewGame) {
+			boardPanel = new BoardPanel();
+			add(boardPanel,
 					BorderLayout.CENTER);
 			pack();
-		} else if (o == menuitem_manage_connections) {
-			net_config conf = new net_config();
+		} else if (o == menuItemManageConnections) {
+			NetConfig conf = new NetConfig();
 		}
 	}
 
 	public static void main(String[] args) {
-		client c = new client();
+		Client c = new Client();
 
 	}
 }
