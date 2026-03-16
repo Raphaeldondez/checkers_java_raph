@@ -1,17 +1,12 @@
 package client;
 
-import shared.board;
-import java.net.*;
-
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import shared.board;
 
-import java.io.*;
+public class client extends JFrame {
 
-class client extends JFrame {
-	private int port = 5000;
-	private String server_host = "localhost";
-	private Socket socket;
+	public clientNetwork clientNetwork;
 
 	public client() {
 		// setSize(500, 500);
@@ -23,9 +18,9 @@ class client extends JFrame {
 	}
 
 	class board_pannel extends JPanel {
-		private final int board_pannel_size_pixels = 600;
+		public  final int board_pannel_size_pixels = 600;
 
-		public board_pannel() {
+		public static void boardPannel() {
 			board b = new board();
 			b.print_board();
 		}
@@ -59,18 +54,7 @@ class client extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		client c = new client();
-		// b.
+
 	}
 
-	private void move_send(String message) {
-		try {
-			InetAddress serveur = InetAddress.getByName(server_host);
-			socket = new Socket(serveur, port);
-			PrintStream out = new PrintStream(socket.getOutputStream());
-			out.println(message);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

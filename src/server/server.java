@@ -1,14 +1,13 @@
 package server;
 
-import shared.board;
-import java.net.*;
-import java.io.*;
-
-class server {
-	private ServerSocket sock;
+public class server {
+	public serverNetwork network;
 
 	public static void main(String[] args) {
-		int port = Integer.parseInt(args[0]);
+		serverNetwork network = new serverNetwork();
+		network.setPort(500);
+		network.getInfos();
+		//int port = Integer.parseInt();
 		// sock = new ServerSocket(port);
 	}
 }
