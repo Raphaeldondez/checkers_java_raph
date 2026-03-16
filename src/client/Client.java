@@ -144,7 +144,21 @@ class Client extends JFrame implements ActionListener {
 			for (int yIndex = 0; yIndex < b.sideSize; yIndex++) {
 				for (int xIndex = 0; xIndex < b.sideSize; xIndex++) {
 					int boardArrayIdx = xIndex + yIndex * b.sideSize;
-					g.setColor(Color.green);
+					if (yIndex % 2 == 0) {
+						if (xIndex % 2 == 0)
+							g.setColor(Color.WHITE);
+						else {
+							g.setColor(Color.GRAY);
+						}
+
+					} else {
+						if (xIndex % 2 == 1)
+							g.setColor(Color.WHITE);
+						else {
+							g.setColor(Color.GRAY);
+						}
+					}
+
 					g.fillRect(originX + 1 + delta * xIndex,
 							originY + 1 + delta * yIndex,
 							delta - 1, delta - 1);
