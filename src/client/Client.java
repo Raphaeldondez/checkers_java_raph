@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 
 class Client extends JFrame implements ActionListener {
-	private int squareClicked = -1;
+	public int squareClicked = -1;
 	private final int delta = 60;
 	int originX;
 	int originY;
@@ -110,11 +110,24 @@ class Client extends JFrame implements ActionListener {
 		private final int boardPanelSizePixels = 600;
 		private Board b;
 
+		enum clickState {
+			NONE,
+			FIRST
+		}
+
+		clickState cState = clickState.NONE;
+
 		public BoardPanel() {
 			addMouseListener(this);
 			SoundEffect s = new SoundEffect("effects/board_setup.wav");
 			s.play();
 			b = new Board();
+		}
+
+		public boolean isSquareEmpty(int square_num, Board b) {
+			if (b.board[square_num] == 0)
+				return true;
+			return false;
 		}
 
 		public Dimension getPreferredSize() {
@@ -163,7 +176,7 @@ class Client extends JFrame implements ActionListener {
 							originY + 1 + delta * yIndex,
 							delta - 1, delta - 1);
 
-					if (boardArrayIdx == squareClicked) {
+					if (boardArrayIdx == squareClicked && !isSquareEmpty(squareClicked, b)) {
 						g.setColor(Color.green);
 						g.fillRect(originX + 1 + delta * xIndex,
 								originY + 1 + delta * yIndex,
@@ -202,7 +215,6 @@ class Client extends JFrame implements ActionListener {
 					&& p.x > originX) { // make sure click is within bounds
 				squareClicked = ((p.y - originY) / delta) * b.sideSize
 						+ (p.x - originX) / delta;
-				// System.out.printf("clicked on %d\n", squareClicked);
 				repaint();
 			}
 		}
@@ -225,24 +237,6 @@ class Client extends JFrame implements ActionListener {
 
 		}
 
-		// public enum click_state {
-		// NONE {
-		// @Override
-		// public click_state next() {
-		// return FIRST;
-		// if(b. == )
-		// }
-		// },
-
-		// FIRST {
-		// @Override
-		// public click_state next() {
-		// return NONE;
-		// }
-		// };
-
-		// public abstract click_state next();
-		// }
 	}
 
 	@Override
